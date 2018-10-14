@@ -7,36 +7,92 @@ class StatsController < ApplicationController
     # The numbers the user input are in the array @numbers.
     # ================================================================================
 
-    @sorted_numbers = "Replace this string with your answer"
+    @sorted_numbers = @numbers.sort
 
-    @count = "Replace this string with your answer"
+    @count = @numbers.size
 
-    @minimum = "Replace this string with your answer"
+    @minimum = @numbers.at(0)
+    @maximum = @numbers.at(0)
+  
+    @numbers.each do |num|
+                                
+      if (num < @minimum)
+        @minimum = num
+      end
+      
+      if (num > @maximum)
+        @maximum = num
+      end
+    
+    end
 
-    @maximum = "Replace this string with your answer"
+    @range = @maximum - @minimum
 
-    @range = "Replace this string with your answer"
+    # median
+    if @count.odd? == true
+      @median = @sorted_numbers.at((@count - 1)/2)
+    elsif
+      @med_low = @sorted_numbers.at(((@count)/2 - 1))
+      @med_high = @sorted_numbers.at(((@count)/2))
+      @median = (@med_low + @med_high) / 2
+    end
 
-    # Median
-    # ======
+    # sum
+    @sum = 0
+    @numbers.each do |num|
+      @sum = @sum + num
+    end
 
-    @median = "Replace this string with your answer"
+    # mean
+    @mean = @sum / @numbers.size
 
-    @sum = "Replace this string with your answer"
 
-    @mean = "Replace this string with your answer"
+    # variance
+    # to find the variance of a set,
+    #  - we find the mean of the set
+    #  - for each number in the set,
+    #    - we find the difference between the number and the mean
+    #    - we square the difference
+    #  - the variance is the mean of the squared differences  
+    
+    @sum_diff = 0
+    @numbers.each do |num|
+      @sum_diff = (@sum_diff + (num - @mean)**2)
+    end  
+  
+    @variance = @sum_diff/@numbers.size
+  
+    # standard deviation
+    # ==================
+    # To find the standard deviation of a set,
+    #  - take the square root of the variance
+    @standard_deviation = Math.sqrt(@variance)
+  
 
-    # Variance
-    # ========
-
-    @variance = "Replace this string with your answer"
-
-    @standard_deviation = "Replace this string with your answer"
-
-    # Mode
-    # ====
-
-    @mode = "Replace this string with your answer"
+    # mode
+    # initialize vars
+    @current_num = @numbers.at(0)
+    @current_record_count = 1
+    @max_num = @numbers.at(0)
+    @max_record_count = 1
+   
+    @sorted_numbers.each do |num|
+      
+      if (num == @current_num)
+        @current_record_count = @current_record_count + 1
+        
+        if (@current_record_count > @max_record_count)
+          @max_record_count = @current_record_count
+          @max_num = @current_num
+        end
+      else
+        @current_record_count = 1
+        @current_num = num    
+      end
+      
+    end
+    
+    @mode = @max_num
 
     # ================================================================================
     # Your code goes above.
